@@ -2,11 +2,11 @@ package com.automation.legoproject.base;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 
 public class TestContext {
-    @Setter @Getter
+    @Setter
+    @Getter
     private ITestContext context;
 
     public TestContext(ITestContext context) {
@@ -16,14 +16,12 @@ public class TestContext {
     /**
      * To set specific test data
      *
-     * @param driver       - WebDriver
-     * @param methodName   - Method name for faster debuging
-     * @param jsonTestName - Full test name from json
-     * @param browser      - Browser
+     * @param methodName - Method name for faster debuging
+     * @param testName   - Full test name from json
+     * @param browser    - Browser
      */
-    public synchronized void setDefaultTestContextDetails(WebDriver driver, String methodName, String jsonTestName, String browser) {
-        getContext().setAttribute("WebDriver", driver);
-        getContext().setAttribute("JsonTestName", jsonTestName);
+    public synchronized void setTestContextDetails(String methodName, String testName, String browser) {
+        getContext().setAttribute("TestName", testName);
         getContext().setAttribute("MethodName", methodName);
         getContext().setAttribute("Browser", browser);
     }
@@ -34,7 +32,7 @@ public class TestContext {
      * @param attribute -  String attribute value
      * @param value     - String value
      */
-    public synchronized void setCustomTestContextDetail(String attribute, String value) {
+    public synchronized void setCustomAttribute(String attribute, String value) {
         getContext().setAttribute(attribute, value);
     }
 
@@ -43,7 +41,7 @@ public class TestContext {
      *
      * @param attribute -  String attribute value
      */
-    public synchronized Object getDetail(String attribute) {
+    public synchronized Object getAttributeValue(String attribute) {
         return getContext().getAttribute(attribute);
     }
 }

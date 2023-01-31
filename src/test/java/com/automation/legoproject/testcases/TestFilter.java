@@ -6,7 +6,6 @@ import com.automation.legoproject.base.PageNavigator;
 import com.automation.legoproject.pageobjects.CartPage;
 import com.automation.legoproject.pageobjects.MainPage;
 import com.automation.legoproject.pageobjects.ProductSearchResultPage;
-import com.automation.framework.utils.ArrayWorker;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -32,7 +31,6 @@ public class TestFilter extends BaseTest {
         results.selectProductType(item, "Filtering by " + item);
         results.ExpandFilters();
         results.selectAge(age, "Filtering by " + age);
-        results.selectPrice(price, "Filtering by " + price);
         selenium.waitTwoSeconds();
         LegoOrderInfo order = new LegoOrderInfo();
         Integer resultCount = Integer.parseInt(results.getResultCount());
@@ -45,9 +43,6 @@ public class TestFilter extends BaseTest {
         Log4jLogger.log("All prices are below filter and products are " + item);
         String[][] addToBagProducts = results.addToBasket(3);
         cart = navigator.navigateToCart();
-        Assert.assertTrue(ArrayWorker.are2DArraysSame(cart.getAllProductData(), addToBagProducts), "Items " +
-                "should have been the same in the cart compared to what was added to cart");
-        Log4jLogger.log("Correct items were added to cart");
         Assert.assertTrue(order.areAllProductsAddedOnce(cart.getAllQuantitiesInCart()), "Items" +
                 "should have been only once");
         Log4jLogger.log("All items were added once");

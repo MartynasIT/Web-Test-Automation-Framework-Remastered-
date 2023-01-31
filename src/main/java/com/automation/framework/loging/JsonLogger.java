@@ -1,36 +1,36 @@
 package com.automation.framework.loging;
 
-import com.automation.framework.utils.JsonManipulator;
-import com.automation.framework.utils.SystemUtil;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JsonLogger implements FileLogger {
-    JSONObject jsonObject;
-    public final static String JSON_PATH = "./Reports/" + "RunResults.json";
+    public static final String PATH = "./Reports/" + "RunResults.json";
+    private List<TestResult> testResults = new ArrayList<>();
+    private ObjectMapper mapper = new ObjectMapper();
 
     public JsonLogger() {
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
         CreateResultDir();
-    }
-
-    public synchronized void log(String methodName, boolean passed, String error, String browser, String fullName) {
         try {
-            JSONParser parser = new JSONParser();
-            jsonObject = (JSONObject) parser.parse(new FileReader(JSON_PATH));
-        } catch (IOException | ParseException e) {
-            jsonObject = new JSONObject();
+            TestResult[] existingTestResults = mapper.readValue(new File(PATH), TestResult[].class);
+            for (TestResult testResult : existingTestResults) {
+                testResults.add(testResult);
+            }
+        } catch (IOException ignored) {
         }
-        JSONObject inner = new JSONObject();
-        inner.put("Method_Name", methodName);
-        inner.put("Browser", browser);
-        inner.put("Passed", passed);
-        inner.put("Error_Log", error);
-        jsonObject.put(fullName, inner);
-        SystemUtil.writeFile(JSON_PATH, new JsonManipulator(jsonObject.toString()).makeJsonNice());
     }
 
+    public synchronized void log(TestResult result) {
+        testResults.add(result);
+        try {
+            mapper.writeValue(new File(PATH), testResults);
+        } catch (IOException e) {
+            System.out.println("Error writing results to file: " + e.getMessage());
+        }
+    }
 }

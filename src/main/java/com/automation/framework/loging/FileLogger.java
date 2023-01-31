@@ -1,11 +1,11 @@
 package com.automation.framework.loging;
 
-import com.automation.framework.utils.SystemUtil;
+import com.automation.framework.utils.SystemWriter;
 
 public interface FileLogger {
-    void log(String className, boolean passed, String error, String browser, String fullName);
+    void log(TestResult result);
 
     default void CreateResultDir() {
-        SystemUtil.makeDir("./Reports/");
+        SystemWriter.makeDir("./Reports/");
     }
 }

@@ -1,11 +1,11 @@
 package com.automation.legoproject.base;
 
-import com.automation.framework.utils.CoreSelenium;
+import com.automation.framework.utils.SeleniumCore;
 
 public class BasePage {
-    protected CoreSelenium selenium;
+    protected SeleniumCore selenium;
 
-    public BasePage(CoreSelenium coreSelenium) {
-        this.selenium = coreSelenium;
+    public BasePage(SeleniumCore seleniumCore) {
+        this.selenium = seleniumCore;
     }
 }

@@ -3,8 +3,6 @@ package com.automation.framework.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
-import lombok.Setter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,16 +11,14 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 
 public class JsonReader {
-    @Getter @Setter
     private String path;
-    @Getter @Setter
     private JSONObject jsonObject;
     JSONParser parser;
 
     public JsonReader(String path) {
-        setPath(path);
+        this.path = path;
         parser = new JSONParser();
-        if (getPath().contains(".json"))
+        if (path.contains(".json"))
             parseFromFile();
         else
             parseFromString();
@@ -30,7 +26,7 @@ public class JsonReader {
 
     public JsonReader parseFromFile() {
         try {
-            setJsonObject((JSONObject) parser.parse(SystemUtil.readFile(getPath())));
+            jsonObject = ((JSONObject) parser.parse(SystemReader.readFile(path)));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -41,7 +37,7 @@ public class JsonReader {
 
     public JsonReader parseFromString() {
         try {
-            setJsonObject((JSONObject) parser.parse(getPath()));
+            jsonObject = ((JSONObject) parser.parse(path));
         } catch (ParseException e) {
             throw new RuntimeException("Problem reading JSON string");
         }
@@ -49,26 +45,26 @@ public class JsonReader {
     }
 
     public JSONObject returnJsonObject() {
-        return getJsonObject();
+        return jsonObject;
     }
 
     public String getValue(String key) {
         if (key.contains("."))
             return extractFromJsonArray(key);
 
-        return getJsonObject().get(key).toString();
+        return jsonObject.get(key).toString();
     }
 
     private String extractFromJsonArray(String key) {
         String[] parts = key.split("\\.");
         String array = parts[0];
         String item = parts[1];
-        JSONObject results = (JSONObject) getJsonObject().get(array);
+        JSONObject results = (JSONObject) jsonObject.get(array);
         return results.get(item).toString();
     }
 
     public JSONArray getJsonArray(String value) {
-        JSONObject object = parseFromFile().getJsonObject();
+        JSONObject object = parseFromFile().jsonObject;
         return (JSONArray) object.get(value);
     }
 

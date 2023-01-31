@@ -1,7 +1,7 @@
 package com.automation.legoproject.base;
 
 import com.automation.framework.loging.Log4jLogger;
-import com.automation.framework.utils.CoreSelenium;
+import com.automation.framework.utils.SeleniumCore;
 import com.automation.legoproject.pagecomponents.HeaderMenu;
 import com.automation.legoproject.pageobjects.CartPage;
 import com.automation.legoproject.pageobjects.ProductSearchResultPage;
@@ -9,7 +9,7 @@ import com.automation.legoproject.pageobjects.ProductSearchResultPage;
 public class PageNavigator extends BasePage{
     HeaderMenu header;
 
-    public PageNavigator(CoreSelenium selenium){
+    public PageNavigator(SeleniumCore selenium){
         super(selenium);
         header = new HeaderMenu(selenium);
     }

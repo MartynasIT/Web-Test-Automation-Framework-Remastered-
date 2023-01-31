@@ -1,6 +1,7 @@
 package com.automation.framework.driver;
 
-import com.automation.framework.utils.SystemUtil;
+import com.automation.framework.utils.SystemReader;
+import com.automation.framework.utils.SystemWriter;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.wdm.config.OperatingSystem;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -8,8 +9,8 @@ import org.openqa.selenium.edge.EdgeDriver;
 public class EdgeDriverManager extends DriverManager {
 
     @Override
-    protected void createWedDriver() {
-        SystemUtil.OSType os = SystemUtil.getOperatingSystemType();
+    protected void createDriver() {
+        SystemReader.OSType os = SystemReader.getOperatingSystemType();
         switch (os) {
             case WINDOWS:
                 WebDriverManager.edgedriver().operatingSystem(OperatingSystem.WIN).setup();

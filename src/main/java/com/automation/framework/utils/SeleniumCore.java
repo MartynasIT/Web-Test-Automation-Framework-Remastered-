@@ -4,6 +4,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 
+import com.automation.framework.driver.DriverFactory;
+import com.automation.framework.driver.DriverManager;
 import com.automation.framework.loging.Log4jLogger;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
@@ -20,35 +22,25 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.*;
 
-public class CoreSelenium {
+public class SeleniumCore {
 
-    private final ThreadLocal<WebDriver> driver = new ThreadLocal<WebDriver>();
-    @Setter @Getter
+
+    private final WebDriver driver;
+    @Setter
+    @Getter
     private static Integer maxWaitTime = 20;
-    @Setter @Getter
+    @Setter
+    @Getter
     private static Integer pollTime = 2;
-    private Log4jLogger logger;
 
-    public CoreSelenium(WebDriver driver) {
-        setDriver(driver);
+
+    public SeleniumCore(WebDriver driver) {
+        this.driver = driver;
     }
 
     private void log(String logMessage) {
         if (logMessage != null)
-            logger.log(logMessage);
-    }
-
-    private synchronized void setDriver(WebDriver driver) {
-        this.driver.set(driver);
-    }
-
-    /**
-     * Get driver for correct thread
-     *
-     * @return - WebDriver
-     */
-    public synchronized WebDriver getDriver() {
-        return this.driver.get();
+            Log4jLogger.log(logMessage);
     }
 
     /**
@@ -58,7 +50,7 @@ public class CoreSelenium {
      * @param logMessage - Message for logging
      */
     public void get(String url, String logMessage) {
-        getDriver().get(url);
+        driver.get(url);
         log(logMessage + " " + url);
     }
 
@@ -135,7 +127,7 @@ public class CoreSelenium {
      * @param pollTime    - Poll interval
      */
     public void clickRadioButton(By locator, String logMessage, Integer maxWaitTime, Integer pollTime) {
-        Actions action = new Actions(getDriver());
+        Actions action = new Actions(driver);
         WebElement radioBtn = this.findElement(locator, maxWaitTime, pollTime, logMessage);
         action.click(radioBtn).build().perform();
         log(logMessage);
@@ -310,7 +302,7 @@ public class CoreSelenium {
      * @return - WebElement
      */
     public WebElement findElement(By locator) {
-        return getDriver().findElement(locator);
+        return driver.findElement(locator);
     }
 
     /**
@@ -320,7 +312,7 @@ public class CoreSelenium {
      * @return - List of WebElements
      */
     public List<WebElement> findElements(By locator) {
-        return getDriver().findElements(locator);
+        return driver.findElements(locator);
     }
 
     /**
@@ -333,7 +325,7 @@ public class CoreSelenium {
      */
     public WebElement findElement(By locator, Integer maxWaitTime, Integer pollTime, String logMessage) {
         if (isElementFound(locator, maxWaitTime, pollTime)) {
-            return getDriver().findElement(locator);
+            return driver.findElement(locator);
         } else {
             throw new RuntimeException(logMessage + " And It Was Not Found!");
         }
@@ -348,12 +340,12 @@ public class CoreSelenium {
      */
     private Wait<WebDriver> getWait(Integer maxWaitTime, Integer pollTime) {
         if (maxWaitTime == null) {
-            maxWaitTime = CoreSelenium.maxWaitTime;
+            maxWaitTime = SeleniumCore.maxWaitTime;
         }
         if (pollTime == null) {
-            pollTime = CoreSelenium.pollTime;
+            pollTime = SeleniumCore.pollTime;
         }
-        return new FluentWait<>(getDriver())
+        return new FluentWait<>(driver)
                 .withTimeout(Duration.ofSeconds(maxWaitTime))
                 .pollingEvery(Duration.ofSeconds(pollTime))
                 .ignoring(NoSuchElementException.class);
@@ -366,7 +358,7 @@ public class CoreSelenium {
      * @param logMessage - Message for logging
      */
     public void jsClick(WebElement element, String logMessage) {
-        JavascriptExecutor javaScriptExecutor = (JavascriptExecutor) getDriver();
+        JavascriptExecutor javaScriptExecutor = (JavascriptExecutor) driver;
         javaScriptExecutor.executeScript("arguments[0].click();", element);
         log(logMessage);
     }
@@ -407,7 +399,7 @@ public class CoreSelenium {
      */
     public WebElement waitForElementToBeFound(By locator, Integer maxWaitTime, Integer pollTime) {
         try {
-            this.getWait(maxWaitTime, pollTime).until((WebDriver t) -> getDriver().findElement(locator));
+            this.getWait(maxWaitTime, pollTime).until((WebDriver t) -> driver.findElement(locator));
             return this.findElement(locator);
         } catch (Exception e) {
             return null;
@@ -651,7 +643,7 @@ public class CoreSelenium {
      * @return - WebDriver with focus to the frame
      */
     public WebDriver switchToFrame(By locator, Integer maxWaitTime, Integer pollTime) {
-        return getDriver().switchTo().frame(this.waitForElementToBeFound(locator, maxWaitTime, pollTime));
+        return driver.switchTo().frame(this.waitForElementToBeFound(locator, maxWaitTime, pollTime));
     }
 
     /**
@@ -671,7 +663,7 @@ public class CoreSelenium {
      * @return - WebDriver with focus to the frame
      */
     public WebDriver switchToFrame(String name) {
-        return getDriver().switchTo().frame(name);
+        return driver.switchTo().frame(name);
     }
 
     /**
@@ -680,7 +672,7 @@ public class CoreSelenium {
      * @return - WebDriver with focus to the parent frame
      */
     public WebDriver switchToParentFrame() {
-        return getDriver().switchTo().parentFrame();
+        return driver.switchTo().parentFrame();
     }
 
     /**
@@ -689,7 +681,7 @@ public class CoreSelenium {
      * @return - WebDriver with focus to top (main) frame
      */
     public WebDriver switchToDefaultContent() {
-        return getDriver().switchTo().defaultContent();
+        return driver.switchTo().defaultContent();
     }
 
     /**
@@ -699,7 +691,7 @@ public class CoreSelenium {
      * @return - WebDriver with focus the frame
      */
     public WebDriver switchFrameById(String id) {
-        return getDriver().switchTo().frame(id);
+        return driver.switchTo().frame(id);
     }
 
     /**
@@ -709,28 +701,14 @@ public class CoreSelenium {
      * @return - WebDriver with focus the frame
      */
     public WebDriver switchFrameByIndex(int index) {
-        return getDriver().switchTo().frame(index);
-    }
-
-    /**
-     * Close window (tab)
-     */
-    public synchronized void closeDriver() {
-        getDriver().close();
-    }
-
-    /**
-     * Close the browser
-     */
-    public synchronized void quitDriver() {
-        getDriver().quit();
+        return driver.switchTo().frame(index);
     }
 
     /**
      * Scroll to page top
      */
     public void scrollTop() {
-        JavascriptExecutor javaScriptExecutor = (JavascriptExecutor) getDriver();
+        JavascriptExecutor javaScriptExecutor = (JavascriptExecutor) driver;
         javaScriptExecutor.executeScript("window.scrollTo(0,0)");
     }
 
@@ -738,7 +716,7 @@ public class CoreSelenium {
      * Scroll down 250 pixels
      */
     public void scrollDown() {
-        JavascriptExecutor javaScriptExecutor = (JavascriptExecutor) getDriver();
+        JavascriptExecutor javaScriptExecutor = (JavascriptExecutor) driver;
         javaScriptExecutor.executeScript("window.scrollTo(0,250)");
     }
 
@@ -746,7 +724,7 @@ public class CoreSelenium {
      * Zoom out to 67%
      */
     public void zoomOut() {
-        JavascriptExecutor executor = (JavascriptExecutor) getDriver();
+        JavascriptExecutor executor = (JavascriptExecutor) driver;
         executor.executeScript("document.body.style.zoom = '67%'");
     }
 
@@ -758,14 +736,14 @@ public class CoreSelenium {
      */
     public void waitDownloading(String downloadDir, String fileName) {
         Path dowloadFilePath = Paths.get(downloadDir, fileName);
-        new WebDriverWait(getDriver(), 100).until(d -> dowloadFilePath.toFile().exists());
+        new WebDriverWait(driver, Duration.ofSeconds(6)).until(d -> dowloadFilePath.toFile().exists());
     }
 
     /**
      * Scroll to the complete bottom of the page
      */
     public void scrollToBottom() {
-        ((JavascriptExecutor) driver.get()).executeScript("window.scrollTo(0, document.body.scrollHeight)");
+        ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight)");
     }
 
     /**
@@ -791,7 +769,7 @@ public class CoreSelenium {
      * @return - UI attribute text
      */
     public String getUiAttribute(By element, String attributeName, String logMessage, Integer pollTime) {
-        String attributeProperty = getDriver().findElement(element).getCssValue(attributeName);
+        String attributeProperty = driver.findElement(element).getCssValue(attributeName);
         log(logMessage);
         if (attributeName.contains("color")) {
             return Color.fromString(attributeProperty).asHex();
@@ -856,7 +834,7 @@ public class CoreSelenium {
         try {
             return this.getWait(maxWaitTime, pollTime).until((WebDriver t) -> {
                 try {
-                    String ulr = getDriver().getCurrentUrl().toLowerCase().replace("-", " ");
+                    String ulr = driver.getCurrentUrl().toLowerCase().replace("-", " ");
                     return ulr != null && ulr.contains(text.toLowerCase());
                 } catch (Exception e) {
                     return false;
@@ -890,14 +868,14 @@ public class CoreSelenium {
      * Get open browser tabs
      */
     public ArrayList<String> getTabs() {
-        return new ArrayList<java.lang.String>(getDriver().getWindowHandles());
+        return new ArrayList<java.lang.String>(driver.getWindowHandles());
     }
 
     /**
      * Get JavascriptExecutor object
      */
     public JavascriptExecutor getJavascriptExecutor() {
-        return (JavascriptExecutor) getDriver();
+        return (JavascriptExecutor) driver;
     }
 
     private class sourceContainsText implements ExpectedCondition<Boolean> {
@@ -944,7 +922,7 @@ public class CoreSelenium {
      * @param webElement - WebElement
      */
     public void scrollIntoView(WebElement webElement) {
-        ((JavascriptExecutor) this.getDriver()).executeScript("arguments[0].scrollIntoView(true);", webElement);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", webElement);
         waitForElementToBeClickable(webElement);
     }
 

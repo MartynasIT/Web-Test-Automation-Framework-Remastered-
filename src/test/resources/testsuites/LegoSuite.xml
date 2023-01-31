@@ -7,7 +7,18 @@
     </listeners>
 
     <test name="Test filter and cart">
-        <parameter name="testDataPath" value="src/test/resources/TestData/DataKeyChainSearch.json"/>
+        <parameter name="testDataPath" value="src/test/resources/TestData/DataKeyChainSearchPass.json"/>
+        <classes>
+            <class name="com.automation.legoproject.testcases.TestFilter">
+                <methods>
+                    <include name="testFilterAndBasket"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Test filter and cart Fail">
+        <parameter name="testDataPath" value="src/test/resources/TestData/DataKeyChainSearchFail.json"/>
         <classes>
             <class name="com.automation.legoproject.testcases.TestFilter">
                 <methods>

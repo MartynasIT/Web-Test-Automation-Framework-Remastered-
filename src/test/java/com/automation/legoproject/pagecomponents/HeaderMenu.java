@@ -1,6 +1,6 @@
 package com.automation.legoproject.pagecomponents;
 
-import com.automation.framework.utils.CoreSelenium;
+import com.automation.framework.utils.SeleniumCore;
 import com.automation.legoproject.base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -18,7 +18,7 @@ public class HeaderMenu extends BasePage {
     private final By SEARCH_ICON = By.xpath("//button[@data-test='search-input-button']");
     private final By SEARCH_INPUT = By.xpath("//input[@data-test='search-input']");
 
-    public HeaderMenu(CoreSelenium selenium) {
+    public HeaderMenu(SeleniumCore selenium) {
         super(selenium);
     }
 

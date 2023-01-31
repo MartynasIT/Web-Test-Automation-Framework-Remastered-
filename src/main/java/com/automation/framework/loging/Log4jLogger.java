@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Log4jLogger implements ConsoleLogger {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(Log4jLogger.class);
 
     public static void log(String message) {
         logger.info(message);

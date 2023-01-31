@@ -1,6 +1,6 @@
 package com.automation.legoproject.pagecomponents;
 
-import com.automation.framework.utils.CoreSelenium;
+import com.automation.framework.utils.SeleniumCore;
 import com.automation.legoproject.base.BasePage;
 import org.openqa.selenium.By;
 
@@ -9,8 +9,8 @@ public class SpamPopUp extends BasePage {
     private final By POP_UP_SUBMIT = By.xpath("//div[@class='AgeGatestyles__Wrapper-xudtvj-0 bblFHz']//button[@type='submit']");
     private final By CONTINUE = By.xpath("//button[contains(text(),'Continue')]");
 
-    public SpamPopUp(CoreSelenium coreSelenium) {
-        super(coreSelenium);
+    public SpamPopUp(SeleniumCore seleniumCore) {
+        super(seleniumCore);
     }
 
     public void bypassPopUps() {

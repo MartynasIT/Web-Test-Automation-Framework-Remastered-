@@ -2,7 +2,7 @@ package com.automation.legoproject.pageobjects;
 
 import com.automation.framework.loging.Log4jLogger;
 import com.automation.legoproject.base.BasePage;
-import com.automation.framework.utils.CoreSelenium;
+import com.automation.framework.utils.SeleniumCore;
 import org.openqa.selenium.By;
 
 public class ProductInfoPage extends BasePage {
@@ -14,7 +14,7 @@ public class ProductInfoPage extends BasePage {
     private By VIEW_MY_BAG = By.xpath("//a[@data-test='view-my-bag']");
 
 
-    public ProductInfoPage(CoreSelenium selenium) {
+    public ProductInfoPage(SeleniumCore selenium) {
         super(selenium);
         if (!selenium.isElementFound(WISHLISH_BUTTON))
             throw new RuntimeException("Failed to load " + PAGE_NAME);

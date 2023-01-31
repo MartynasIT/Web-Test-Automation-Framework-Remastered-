@@ -1,16 +1,15 @@
 package com.automation.framework.driver;
 
-import com.automation.framework.utils.SystemUtil;
+import com.automation.framework.utils.SystemReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.wdm.config.OperatingSystem;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class ChromeDriverManager extends DriverManager {
-
     @Override
-    protected void createWedDriver() {
-        SystemUtil.OSType os = SystemUtil.getOperatingSystemType();
-        switch (os) {
+    protected void createDriver() {
+        SystemReader.OSType osType = SystemReader.getOperatingSystemType();
+        switch (osType) {
             case WINDOWS:
                 WebDriverManager.chromedriver().operatingSystem(OperatingSystem.WIN).setup();
                 break;

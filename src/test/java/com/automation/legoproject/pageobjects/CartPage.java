@@ -2,7 +2,7 @@ package com.automation.legoproject.pageobjects;
 
 import com.automation.framework.loging.Log4jLogger;
 import com.automation.legoproject.base.BasePage;
-import com.automation.framework.utils.CoreSelenium;
+import com.automation.framework.utils.SeleniumCore;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -11,12 +11,10 @@ public class CartPage extends BasePage {
     private static final String PAGE_NAME = "My bag";
     private final By MY_BAG_LABEL = By.xpath("//h1[contains(text(),'My Bag')]");
     private final By CART_ITEM = By.xpath("//div[@data-test='cart-item']");
-    private final By TOTAL_AMOUNT = By.xpath("//main[@id='main-content']/div[1]/div[2]/div[2]/div[3]/div[1]/div[2]/" +
-            "div[1]/div[1]/div[1]/div[5]/div[1]/span[1]/span[1]");
-    private final By SHIPPING_AMOUNT = By.xpath("//main[1]/div[1]/div[2]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/" +
-            "div[1]/div[3]/span[2]/span[1]");
+    private final By TOTAL_AMOUNT = By.cssSelector("[class='Pricingstyles__TotalRow-sc-1jfbpia-4 grVYDu'] [class='Markup__StyledMarkup-sc-nc8x20-0 dbPAWk']");
+    private final By SHIPPING_AMOUNT = By.cssSelector("[class] [class='Pricingstyles__PriceRow-sc-1jfbpia-3 hAwpoa']:nth-child(4) [class='Markup__StyledMarkup-sc-nc8x20-0 dbPAWk']");
 
-    public CartPage(CoreSelenium selenium) {
+    public CartPage(SeleniumCore selenium) {
         super(selenium);
         if (!selenium.isElementFound(MY_BAG_LABEL))
             throw new RuntimeException("Failed to load " + PAGE_NAME);
@@ -34,7 +32,7 @@ public class CartPage extends BasePage {
         String[][] products = new String[getAmountOfItemsInCart()][2];
         int i = 0;
         for (WebElement product : selenium.findElements(CART_ITEM)) {
-            products[i][0] = product.findElement(By.xpath(".//span[@data-test='product-title']")).getText();
+            products[i][0] = product.findElement(By.xpath(".//h3[@data-test='product-title']//span")).getText();
             products[i][1] = product.findElement(By.xpath(".//span[@data-test='product-price']")).getText().
                     replace("Price", "").
                     trim();

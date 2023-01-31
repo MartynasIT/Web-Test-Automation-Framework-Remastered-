@@ -2,7 +2,7 @@ package com.automation.legoproject.pageobjects;
 
 import com.automation.framework.loging.Log4jLogger;
 import com.automation.legoproject.base.BasePage;
-import com.automation.framework.utils.CoreSelenium;
+import com.automation.framework.utils.SeleniumCore;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -17,7 +17,7 @@ public class ProductSearchResultPage extends BasePage {
     private final By SHOW_ALL_BUTTON = By.linkText("Show All");
     private final By PRODUCT_ITEM = By.xpath("//li[@data-test='product-item']");
 
-    public ProductSearchResultPage(CoreSelenium selenium) {
+    public ProductSearchResultPage(SeleniumCore selenium) {
         super(selenium);
         if (!selenium.isElementFound(SORT_BUTTON))
             throw new RuntimeException("Failed to load " + PAGE_NAME);
@@ -56,7 +56,7 @@ public class ProductSearchResultPage extends BasePage {
     private WebElement getCheckBoxElement(String filter) {
         return selenium.findElement(By.xpath("//label[@data-test='checkbox-label']/child::" +
                 "div/following-sibling::" + "span[contains(text()," + "'" + filter + "'" + ")]" +
-                "/preceding-sibling::div/child::input"), 1,1, "Looking for filter option " + filter);
+                "/preceding-sibling::div/child::input"), 1, 1, "Looking for filter option " + filter);
     }
 
     public void ExpandFilters() {
@@ -89,7 +89,7 @@ public class ProductSearchResultPage extends BasePage {
         for (WebElement product : selenium.findElements(PRODUCT_ITEM)) {
             if (i == howManyToAdd)
                 return products;
-            WebElement addToBag = product.findElement(By.xpath(".//button[@data-test='product-leaf-cta-add-to-cart']"));
+            WebElement addToBag = product.findElement(By.xpath(".//button[@data-test='add-to-cart-skroll-cta']"));
             selenium.jsClick(addToBag, "Adding product to the basket");
             products[i][0] = selenium.findElement(By.xpath("//div[@data-test='add-to-bag-modal']//p[1]"),
                     2, 1, "Looking for add to bag").getText();

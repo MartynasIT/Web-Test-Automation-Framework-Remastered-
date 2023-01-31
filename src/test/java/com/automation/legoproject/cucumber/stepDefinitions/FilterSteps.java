@@ -19,7 +19,7 @@ public class FilterSteps extends BaseTest {
 
     @Before
     public void initialize() {
-        super.setup("src/test/resources/testdata/DataKeychainSearch.json");
+        super.setup("src/test/resources/testdata/DataKeychainSearchPass.json");
         super.startDriver();
     }
 
@@ -68,6 +68,6 @@ public class FilterSteps extends BaseTest {
 
     @After
     public void quitDriver() {
-        super.getDriverManager().quitWebDriver();
+        super.getDriverManager().quit();
     }
 }
