@@ -4,8 +4,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 
-import com.automation.framework.driver.DriverFactory;
-import com.automation.framework.driver.DriverManager;
 import com.automation.framework.loging.Log4jLogger;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
@@ -14,8 +12,6 @@ import org.openqa.selenium.support.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -26,12 +22,10 @@ public class SeleniumCore {
 
 
     private final WebDriver driver;
-    @Setter
-    @Getter
-    private static Integer maxWaitTime = 20;
-    @Setter
-    @Getter
-    private static Integer pollTime = 2;
+
+    private static final Integer maxWaitTime = 20;
+
+    private static final Integer pollTime = 2;
 
 
     public SeleniumCore(WebDriver driver) {

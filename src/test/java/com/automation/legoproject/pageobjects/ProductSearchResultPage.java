@@ -91,10 +91,10 @@ public class ProductSearchResultPage extends BasePage {
                 return products;
             WebElement addToBag = product.findElement(By.xpath(".//button[@data-test='add-to-cart-skroll-cta']"));
             selenium.jsClick(addToBag, "Adding product to the basket");
-            products[i][0] = selenium.findElement(By.xpath("//div[@data-test='add-to-bag-modal']//p[1]"),
-                    2, 1, "Looking for add to bag").getText();
-            products[i][1] = selenium.findElement(By.xpath("//div[@data-test='add-to-bag-modal']//p[2]"),
-                    2, 1, "Looking for add to bag").getText();
+            products[i][0] = selenium.findElement(By.xpath("//div[@data-test='added-item']//p[1]"),
+                    2, 1, "Looking for product name").getText();
+            products[i][1] = selenium.findElement(By.xpath("//div[@data-test='added-item']//p[2]"),
+                    2, 1, "Looking for product price").getText();
             selenium.click(By.xpath("//button[@data-test='continue-shopping-button']"));
             i++;
         }

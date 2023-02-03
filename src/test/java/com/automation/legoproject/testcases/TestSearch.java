@@ -15,9 +15,9 @@ import java.util.List;
 
 
 public class TestSearch extends BaseTest {
-    MainPage mainPage;
-    HeaderMenu header;
-    ProductInfoPage product;
+    private MainPage mainPage;
+    private HeaderMenu header;
+    private ProductInfoPage product;
 
     @Test
     public void testSearchSuggestion() {

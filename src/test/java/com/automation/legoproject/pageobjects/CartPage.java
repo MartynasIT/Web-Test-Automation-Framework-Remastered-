@@ -11,8 +11,13 @@ public class CartPage extends BasePage {
     private static final String PAGE_NAME = "My bag";
     private final By MY_BAG_LABEL = By.xpath("//h1[contains(text(),'My Bag')]");
     private final By CART_ITEM = By.xpath("//div[@data-test='cart-item']");
-    private final By TOTAL_AMOUNT = By.cssSelector("[class='Pricingstyles__TotalRow-sc-1jfbpia-4 grVYDu'] [class='Markup__StyledMarkup-sc-nc8x20-0 dbPAWk']");
-    private final By SHIPPING_AMOUNT = By.cssSelector("[class] [class='Pricingstyles__PriceRow-sc-1jfbpia-3 hAwpoa']:nth-child(4) [class='Markup__StyledMarkup-sc-nc8x20-0 dbPAWk']");
+    private final By TOTAL_AMOUNT = By.xpath("//main[@id='main-content']/div[@class='Cartstyles__" +
+            "MaxWidthContainer-sc-7x7mam-1 NFen']/div[@class='MinHeightContent-sc-1delze2-0 dHuDgg']/div" +
+            "[@class='Cartstyles__Wrapper-sc-7x7mam-2 gUWxUE']//div[@class='LoadingWrapper__Wrapper-sc-128aqon-0 kyVPSj']" +
+            "//div[@class='AnimateHeight__Wrapper-sc-1terme-0 dfnXYV']//div[@class='Pricingstyles__TotalRow-sc-1jfbpia-4 grVYDu']/span[@class='Text__BaseText-sc-13i1y3k-0 eTDhBg']/span");
+    private final By SHIPPING_AMOUNT = By.xpath("//main[@id='main-content']/div[@class='Cartstyles__" +
+            "MaxWidthContainer-sc-7x7mam-1 NFen']/div[@class='MinHeightContent-sc-1delze2-0 dHuDgg']//div[@class='LoadingWrapper__" +
+            "Wrapper-sc-128aqon-0 kyVPSj']//div[@class='AnimateHeight__Wrapper-sc-1terme-0 dfnXYV']/div[3]/span[2]/span");
 
     public CartPage(SeleniumCore selenium) {
         super(selenium);
@@ -53,8 +58,8 @@ public class CartPage extends BasePage {
         return amounts;
     }
 
-    public double getTotal() {
-        return Double.parseDouble(selenium.getText(TOTAL_AMOUNT).replace("$", ""));
+    public String getTotal() {
+        return selenium.getText(TOTAL_AMOUNT);
     }
 
     public double getShippingPrice() {

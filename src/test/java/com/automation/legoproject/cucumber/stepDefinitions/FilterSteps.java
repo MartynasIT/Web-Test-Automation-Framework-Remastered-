@@ -6,6 +6,7 @@ import com.automation.legoproject.base.PageNavigator;
 import com.automation.legoproject.pageobjects.MainPage;
 import com.automation.legoproject.pageobjects.ProductSearchResultPage;
 import com.automation.legoproject.testcases.TestFilter;
+import com.automation.legoproject.utils.LegoOrder;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
@@ -55,13 +56,12 @@ public class FilterSteps extends BaseTest {
     public void iSeeKeychainsThatWereCorrectlyFilteredItemIsAgeMaxPrice(String item, String maxPrice) {
         selenium.waitTwoSeconds();
         TestFilter filterClass = new TestFilter();
-        TestFilter.LegoOrderInfo orderInfo = filterClass.new LegoOrderInfo();
         Integer resultCount = Integer.parseInt(results.getResultCount());
         results.loadProducts(resultCount);
         Assert.assertEquals(resultCount, results.getCountOfActualLoadedItems(),
                 "Page should have loaded exact amount of products");
         Log4jLogger.log("Correct amount of products was loaded");
-        Assert.assertTrue(orderInfo.isFilterSatisfied(maxPrice,
+        Assert.assertTrue(LegoOrder.isFilterSatisfied(maxPrice,
                 results.getAllProductData()), "Filter did not work correctly");
         Log4jLogger.log("All prices are below filter and products are " + item);
     }
